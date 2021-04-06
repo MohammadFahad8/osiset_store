@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PackageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', function () {
-    return view('welcome');
-})->middleware(['auth.shopify'])->name('home');
+Route::get('/',[PackageController::class,'index'])->middleware(['auth.shopify'])->name('home');
+Route::get('/edit-packages/{id}',[PackageController::class,'index'])->middleware(['auth.shopify'])->name('editpackage');
+Route::post('/add_package',[PackageController::class,'edit'])->name('AddPackage');
