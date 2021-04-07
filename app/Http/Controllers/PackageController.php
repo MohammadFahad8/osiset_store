@@ -30,6 +30,8 @@ class PackageController extends Controller
     public function create()
     {
         //
+        $packages = Shopifypackages::latest()->get();
+        return $packages;
     }
 
     /**
@@ -43,9 +45,7 @@ class PackageController extends Controller
         //
         Shopifypackages::create($request->all());
         $packages = Shopifypackages::latest()->get();
-        return view('welcome',[
-            'packages'=>$packages
-        ]);
+        return $packages;
     }
 
     /**
@@ -84,9 +84,31 @@ class PackageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $get, $id)
     {
-        //
+
+        $this->validate($get, [
+            "name" => "required",
+            "type" => "required",
+            "price" =>"required",
+            
+        ], [
+            "name.required" => "Please enter Name",
+            "type.required" => "Please enter Type",
+            "price.required" => 'Enter your Price',
+           
+        ]);
+
+        
+        $user = Shopifypackages::find($id);
+        $user->name = $get['name'];
+        $user->type = $get['type'];
+        $user->price = $get['price'];
+        
+        $user->save();
+
+        
+        return back();
     }
 
     /**
@@ -98,5 +120,8 @@ class PackageController extends Controller
     public function destroy($id)
     {
         //
+        $package = Shopifypackages::find($id);
+        $package->delete();
+        return $package;
     }
 }
